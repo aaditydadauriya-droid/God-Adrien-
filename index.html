@@ -411,8 +411,8 @@
     </main>
 
     <!-- PERSISTENT SPOTIFY AUDIO PLAYER BAR -->
-    < id="spotifyPlayerBar" class="fixed bottom-0 left-0 right-0 z-50 glassmorphism border-t border-slate-800 p-3 px-4 sm:px-8 hidden">
-        < class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+    <div id="spotifyPlayerBar" class="fixed bottom-0 left-0 right-0 z-50 glassmorphism border-t border-slate-800 p-3 px-4 sm:px-8 hidden">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
             
             <!-- Song Meta -->
             <div class="flex items-center gap-3 min-w-[180px]">
@@ -673,19 +673,21 @@
         }
 
         function playSong(index) {
-            if (index < 0 || index >= appData.music.length) return;
-            currentSongIndex = index;
-            const song = appData.music[index];
+    if (index < 0 || index >= appData.music.length) return;
+    currentSongIndex = index;
+    const song = appData.music[index];
 
-            mainAudio.src = song.url;
-            mainAudio.load();
-            mainAudio.play();
-          
-           document.getElementById('spotifyPlayerBar').classList.remove('hidden');
-            document.getElementById('playerTitle').innerText = song.title;
-            document.getElementById('playerArtist').innerText = song.subtext || 'God Adrien Track';
-            document.getElementById('playPauseBtn').innerHTML = `<i class="fa-solid fa-pause"></i>`;
-        }
+    mainAudio.src = song.url;
+    mainAudio.load(); 
+    mainAudio.play().catch(e => console.log(e)); 
+
+    document.getElementById('spotifyPlayerBar').classList.remove('hidden');
+
+    document.getElementById('playerTitle').innerText = song.title;
+    document.getElementById('playerArtist').innerText = song.subtext || 'God Adrien Track';
+    document.getElementById('playPauseBtn').innerHTML = `<i class="fa-solid fa-pause"></i>`;
+}
+
 
         function togglePlayPause() {
             if (currentSongIndex === -1 && appData.music.length > 0) {
