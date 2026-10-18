@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>God Aditya</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            bg: '#090A0F',
+                            card: '#12141D',
+                            border: '#1F2430',
+                            spotify: '#1DB954',
+                            primary: '#3B82F6',
+                            accent: '#8B5CF6',
+                            emerald: '#10B981',
+                            pink: '#EC4899'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #090A0F;
+            color: #F3F4F6;
+        }
+        .glassmorphism {
+            background: rgba(18, 20, 29, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .spotify-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .spotify-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-4px);
+            border-color: rgba(29, 185, 84, 0.4);
+            box-shadow: 0 10px 25px -5px rgba(29, 185, 84, 0.2);
+        }
+        /* Range slider styling for music player */
+        input[type="range"] {
+            accent-color: #1DB954;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #090A0F;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1F2430;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-emerald-500 selection:text-white pb-28">
+
+    <!-- NAVIGATION HEADER -->
+    <header class="sticky top-0 z-40 glassmorphism border-b border-slate-800/80 px-4 lg:px-8 py-3.5">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+            
+            <!-- Brand Logo -->
+            <a href="#" onclick="showSection('home')" class="flex items-center gap-3 group">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 via-purple-600 to-blue-500 p-[2px] transition-transform group-hover:scale-105">
+                    <div class="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center font-black text-transparent bg-clip-text bg-gradient-to-tr from-emerald-400 to-blue-400 text-lg">
+                        GA
+                    </div>
+                </div>
+                <div>
+                    <span class="text-xl font-black tracking-wider bg-gradient-to-r from-emerald-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
+                        GOD ADRIEN
+                    </span>
+                    <span class="text-[10px] block text-slate-400 font-semibold tracking-widest uppercase">Official Portal</span>
+                </div>
+            </a>
+
+            <!-- Global Search -->
+            <div class="flex-1 max-w-md mx-2">
+                <div class="relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                    <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Search songs, notes, apps..." class="w-full bg-slate-900/90 border border-slate-700/70 rounded-xl pl-10 pr-4 py-2 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition-all">
+                </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <div class="flex items-center gap-3">
+                <nav class="hidden md:flex items-center gap-1 text-sm font-medium text-slate-300">
+                    <button onclick="showSection('home')" class="px-3 py-1.5 rounded-lg hover:text-white hover:bg-slate-800/70 transition-colors"><i class="fa-solid fa-house text-blue-400 mr-1.5"></i>Home</button>
+                    <button onclick="showSection('music')" class="px-3 py-1.5 rounded-lg hover:text-white hover:bg-slate-800/70 transition-colors"><i class="fa-solid fa-music text-emerald-400 mr-1.5"></i>Music</button>
+                    <button onclick="showSection('notes')" class="px-3 py-1.5 rounded-lg hover:text-white hover:bg-slate-800/70 transition-colors"><i class="fa-solid fa-folder-open text-purple-400 mr-1.5"></i>Notes</button>
+                    <button onclick="showSection('apk')" class="px-3 py-1.5 rounded-lg hover:text-white hover:bg-slate-800/70 transition-colors"><i class="fa-solid fa-android text-emerald-400 mr-1.5"></i>APKs</button>
+                    <button onclick="showSection('social')" class="px-3 py-1.5 rounded-lg hover:text-white hover:bg-slate-800/70 transition-colors"><i class="fa-solid fa-share-nodes text-pink-400 mr-1.5"></i>Social</button>
+                </nav>
+
+                <!-- Admin Password Button -->
+                <button onclick="toggleAdminAuth()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-blue-600 text-white font-semibold text-xs tracking-wider uppercase hover:shadow-lg transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-shield-halved text-xs"></i>
+                    <span id="adminBtnText">Admin</span>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Bottom Quick Navigation -->
+        <div class="flex md:hidden justify-around pt-3 border-t border-slate-800/70 mt-2 text-xs font-medium text-slate-300">
+            <button onclick="showSection('home')" class="hover:text-emerald-400 text-center"><i class="fa-solid fa-house text-blue-400 block text-base mb-0.5"></i>Home</button>
+            <button onclick="showSection('music')" class="hover:text-emerald-400 text-center"><i class="fa-solid fa-music text-emerald-400 block text-base mb-0.5"></i>Music</button>
+            <button onclick="showSection('notes')" class="hover:text-emerald-400 text-center"><i class="fa-solid fa-folder-open text-purple-400 block text-base mb-0.5"></i>Notes</button>
+            <button onclick="showSection('apk')" class="hover:text-emerald-400 text-center"><i class="fa-solid fa-android text-emerald-400 block text-base mb-0.5"></i>APKs</button>
+            <button onclick="showSection('social')" class="hover:text-emerald-400 text-center"><i class="fa-solid fa-share-nodes text-pink-400 block text-base mb-0.5"></i>Social</button>
+        </div>
+    </header>
+
+    <!-- MAIN VIEWS CONTAINER -->
+    <main class="max-w-7xl mx-auto px-4 lg:px-8 py-8 w-full">
+
+        <!-- 1. HOME CATEGORY CARDS VIEW -->
+        <section id="viewHome" class="space-y-10">
+            <!-- Hero Banner -->
+            <div class="relative overflow-hidden rounded-3xl p-8 lg:p-12 glassmorphism border border-emerald-500/20 bg-gradient-to-br from-emerald-950/40 via-slate-900 to-slate-950">
+                <div class="relative z-10 max-w-3xl space-y-4">
+                    <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold uppercase tracking-wider">
+                        God Adrien Hub
+                    </span>
+                    <h1 class="text-4xl sm:text-5xl font-black tracking-tight text-white leading-tight">
+                        Explore Music, Notes, Web & Custom Apps
+                    </h1>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                        Welcome! The future starts today.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Main Hub Grid Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Music Section Button Card -->
+                <div onclick="showSection('music')" class="spotify-card p-6 rounded-3xl cursor-pointer group flex flex-col justify-between h-56 border border-emerald-500/20 relative overflow-hidden">
+                    <div class="space-y-2 z-10">
+                        <div class="w-12 h-12 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-music"></i>
+                        </div>
+                        <h3 class="text-2xl font-black text-white group-hover:text-emerald-400 transition-colors">Music Studio</h3>
+                        <p class="text-xs text-slate-400">tap to enjoy music.</p>
+                    </div>
+                    <div class="flex items-center justify-between text-xs font-bold text-emerald-400 z-10">
+                        <span>Open Player</span>
+                        <i class="fa-solid fa-circle-play text-xl group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                </div>
+
+                <!-- Notes Folder Card -->
+                <div onclick="showSection('notes')" class="spotify-card p-6 rounded-3xl cursor-pointer group flex flex-col justify-between h-56 border border-purple-500/20 relative overflow-hidden">
+                    <div class="space-y-2 z-10">
+                        <div class="w-12 h-12 rounded-2xl bg-purple-500/20 text-purple-400 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-folder-open"></i>
+                        </div>
+                        <h3 class="text-2xl font-black text-white group-hover:text-purple-400 transition-colors">Study Notes</h3>
+                        <p class="text-xs text-slate-400">PDF guides, and organized notes folders.</p>
+                    </div>
+                    <div class="flex items-center justify-between text-xs font-bold text-purple-400 z-10">
+                        <span>Browse Papers</span>
+                        <i class="fa-solid fa-arrow-right text-base group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                </div>
+
+                <!-- APK Apps Card -->
+                <div onclick="showSection('apk')" class="spotify-card p-6 rounded-3xl cursor-pointer group flex flex-col justify-between h-56 border border-blue-500/20 relative overflow-hidden">
+                    <div class="space-y-2 z-10">
+                        <div class="w-12 h-12 rounded-2xl bg-blue-500/20 text-blue-400 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-android"></i>
+                        </div>
+                        <h3 class="text-2xl font-black text-white group-hover:text-blue-400 transition-colors">Android APKs</h3>
+                        <p class="text-xs text-slate-400">apps and tools created by God Adrien.</p>
+                    </div>
+                    <div class="flex items-center justify-between text-xs font-bold text-blue-400 z-10">
+                        <span>View Apps</span>
+                        <i class="fa-solid fa-arrow-right text-base group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                </div>
+
+                <!-- Social Links Card -->
+                <div onclick="showSection('social')" class="spotify-card p-6 rounded-3xl cursor-pointer group flex flex-col justify-between h-56 border border-pink-500/20 relative overflow-hidden">
+                    <div class="space-y-2 z-10">
+                        <div class="w-12 h-12 rounded-2xl bg-pink-500/20 text-pink-400 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-share-nodes"></i>
+                        </div>
+                        <h3 class="text-2xl font-black text-white group-hover:text-pink-400 transition-colors">Social Links</h3>
+                        <p class="text-xs text-slate-400">Direct connections to Telegram, Instagram, YouTube & GitHub.</p>
+                    </div>
+                    <div class="flex items-center justify-between text-xs font-bold text-pink-400 z-10">
+                        <span>Connect Direct</span>
+                        <i class="fa-solid fa-arrow-right text-base group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. SPOTIFY STYLE MUSIC SCREEN VIEW -->
+        <section id="viewMusic" class="hidden space-y-6">
+            <!-- Back & Header -->
+            <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                <div class="flex items-center gap-3">
+                    <button onclick="showSection('home')" class="w-10 h-10 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-300 hover:text-white hover:bg-slate-800 transition-colors">
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </button>
+                    <div>
+                        <h2 class="text-2xl sm:text-3xl font-black text-white flex items-center gap-2">
+                            <i class="fa-brands fa-spotify text-emerald-500"></i> God Adrien Music Player
+                        </h2>
+                        <p class="text-xs text-slate-400">Click any track to stream live or download to your phone</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Song List Table (Spotify Style) -->
+            <div class="glassmorphism rounded-3xl border border-slate-800 overflow-hidden">
+                <div class="p-4 bg-slate-900/60 border-b border-slate-800 flex items-center justify-between text-xs font-bold text-slate-400 uppercase tracking-wider">
+                    <div class="flex items-center gap-4">
+                        <span class="w-8 text-center">#</span>
+                        <span>Track Title & Artist</span>
+                    </div>
+                    <span class="mr-12 hidden sm:inline">Actions</span>
+                </div>
+
+                <div id="spotifyTrackList" class="divide-y divide-slate-800/60">
+                    <!-- Dynamic Music Rows -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. NOTES SECTION WITH HEADER DIRECTORIES -->
+        <section id="viewNotes" class="hidden space-y-6">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                <div class="flex items-center gap-3">
+                    <button onclick="showSection('home')" class="w-10 h-10 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-300 hover:text-white hover:bg-slate-800 transition-colors">
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </button>
+                    <div>
+                        <h2 class="text-2xl sm:text-3xl font-black text-white">Academic Notes & PDF Papers</h2>
+                        <p class="text-xs text-slate-400">Organized into subject folders like Class 12 Papers, CS, and more</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="notesContainer" class="space-y-8">
+                <!-- Dynamic Grouped Notes Folders -->
+            </div>
+        </section>
+
+        <!-- 4. APK SECTION VIEW -->
+        <section id="viewApk" class="hidden space-y-6">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                <div class="flex items-center gap-3">
+                    <button onclick="showSection('home')" class="w-10 h-10 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-300 hover:text-white hover:bg-slate-800 transition-colors">
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </button>
+                    <div>
+                        <h2 class="text-2xl sm:text-3xl font-black text-white">Android Applications</h2>
+                        <p class="text-xs text-slate-400">Download APKs directly to your mobile phone</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="apkGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Dynamic APK Cards -->
+            </div>
+        </section>
+
+        <!-- 5. SOCIAL SECTION VIEW -->
+        <section id="viewSocial" class="hidden space-y-6">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                <div class="flex items-center gap-3">
+                    <button onclick="showSection('home')" class="w-10 h-10 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-300 hover:text-white hover:bg-slate-800 transition-colors">
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </button>
+                    <div>
+                        <h2 class="text-2xl sm:text-3xl font-black text-white">Direct Connections</h2>
+                        <p class="text-xs text-slate-400">Reach out directly on preferred platforms</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="socialGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                <!-- Dynamic Social Cards -->
+            </div>
+        </section>
+
+        <!-- 6. ADMIN DASHBOARD PAGE -->
+        <section id="viewAdmin" class="hidden space-y-8">
+            <div class="glassmorphism p-6 rounded-3xl border border-emerald-500/30 flex flex-wrap items-center justify-between gap-4">
+                <div class="flex items-center gap-4">
+                    <div class="p-3.5 rounded-2xl bg-gradient-to-tr from-emerald-600 to-blue-600 text-white font-bold">
+                        <i class="fa-solid fa-user-shield text-2xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-black text-white">Admin Control Panel</h1>
+                        <p class="text-xs text-slate-400">Add songs/Catbox links, folder notes, and export to GitHub</p>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-3">
+                    <button onclick="exportJSON()" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition-colors flex items-center gap-2">
+                        <i class="fa-solid fa-file-export"></i> Export data.json (GitHub)
+                    </button>
+                    <button onclick="showSection('home')" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs transition-colors flex items-center gap-2">
+                        <i class="fa-solid fa-arrow-left"></i> Exit Admin
+                    </button>
+                </div>
+            </div>
+
+            <!-- Form to Add/Edit -->
+            <div class="glassmorphism p-6 lg:p-8 rounded-3xl border border-slate-800 space-y-6">
+                <h2 id="formHeading" class="text-xl font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-circle-plus text-emerald-400"></i> Add Item or Catbox Link
+                </h2>
+
+                <form id="itemForm" onsubmit="handleFormSubmit(event)" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <input type="hidden" id="editItemId" value="">
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Category</label>
+                        <select id="itemCategory" onchange="toggleFolderInput()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:border-emerald-500 focus:outline-none">
+                            <option value="music">🎵 Song / Music Track</option>
+                            <option value="notes">📚 Academic Notes & Papers</option>
+                            <option value="apk">🤖 Android APK App</option>
+                            <option value="social">🌐 Social Link</option>
+                        </select>
+                    </div>
+
+                    <!-- Dynamic Folder/Header Input for Notes -->
+                    <div id="folderInputGroup" class="hidden">
+                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Header Folder Name (e.g., Class 12 Paper)</label>
+                        <input type="text" id="itemFolder" placeholder="e.g. Class 12 Paper, Maths, Computer Science" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:border-emerald-500 focus:outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Title / Name</label>
+                        <input type="text" id="itemTitle" placeholder="Song Name, App Name, or Document Title" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:border-emerald-500 focus:outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Subtext / Artist / Version</label>
+                        <input type="text" id="itemSubtext" placeholder="Artist name, PDF size, v1.0" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:border-emerald-500 focus:outline-none">
+                    </div>
+
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Resource Link (Direct MP3 or Catbox Link)</label>
+                        <input type="url" id="itemUrl" placeholder="https://files.catbox.moe/... or direct file link" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:border-emerald-500 focus:outline-none">
+                    </div>
+
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Description</label>
+                        <textarea id="itemDesc" rows="2" placeholder="Brief note or summary..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:border-emerald-500 focus:outline-none"></textarea>
+                    </div>
+
+                    <div class="md:col-span-2 flex items-center justify-between pt-2">
+                        <button type="button" id="cancelEditBtn" onclick="resetForm()" class="hidden px-4 py-2 rounded-xl bg-slate-800 text-slate-300 font-semibold text-xs">
+                            Cancel Edit
+                        </button>
+                        <button type="submit" id="submitBtn" class="ml-auto px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-blue-600 text-white font-bold text-sm tracking-wide shadow-lg shadow-emerald-500/20">
+                            <i class="fa-solid fa-plus mr-1"></i> Save Resource
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Admin Content Table -->
+            <div class="glassmorphism p-6 rounded-3xl border border-slate-800 space-y-4">
+                <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-list-check text-blue-400"></i> Existing Saved Items
+                </h2>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-slate-300">
+                        <thead class="text-xs uppercase bg-slate-900 text-slate-400 border-b border-slate-800">
+                            <tr>
+                                <th class="py-3.5 px-4">Category</th>
+                                <th class="py-3.5 px-4">Title / Header</th>
+                                <th class="py-3.5 px-4">Tag/Artist</th>
+                                <th class="py-3.5 px-4">File Link</th>
+                                <th class="py-3.5 px-4 text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminTableBody" class="divide-y divide-slate-800">
+                            <!-- Admin List Rows -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- PERSISTENT SPOTIFY AUDIO PLAYER BAR -->
+    <div id="spotifyPlayerBar" class="fixed bottom-0 left-0 right-0 z-50 glassmorphism border-t border-slate-800 p-3 px-4 sm:px-8">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+            
+            <!-- Song Meta -->
+            <div class="flex items-center gap-3 min-w-[180px]">
+                <div class="w-12 h-12 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-emerald-400 font-bold text-lg overflow-hidden">
+                    <i class="fa-solid fa-music"></i>
+                </div>
+                <div class="truncate max-w-[160px] sm:max-w-xs">
+                    <h4 id="playerTitle" class="font-bold text-white text-sm truncate">Select a song to play</h4>
+                    <span id="playerArtist" class="text-xs text-slate-400 block truncate">God Adrien Music</span>
+                </div>
+            </div>
+
+            <!-- Audio Controls & Progress Bar -->
+            <div class="flex-1 max-w-xl flex flex-col items-center gap-1">
+                <div class="flex items-center gap-4 text-slate-300">
+                    <button onclick="prevSong()" class="hover:text-white text-sm"><i class="fa-solid fa-backward-step"></i></button>
+                    <button onclick="togglePlayPause()" id="playPauseBtn" class="w-10 h-10 rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 flex items-center justify-center text-lg font-bold transition-transform active:scale-95">
+                        <i class="fa-solid fa-play ml-0.5"></i>
+                    </button>
+                    <button onclick="nextSong()" class="hover:text-white text-sm"><i class="fa-solid fa-forward-step"></i></button>
+                </div>
+
+                <div class="w-full flex items-center gap-2 text-[11px] text-slate-400">
+                    <span id="currentTime">0:00</span>
+                    <input type="range" id="trackSeekBar" value="0" min="0" max="100" class="w-full h-1 bg-slate-800 rounded-lg cursor-pointer">
+                    <span id="totalTime">0:00</span>
+                </div>
+            </div>
+
+            <!-- Download Button for Mobile / Desktop -->
+            <div class="flex items-center gap-3">
+                <a id="playerDownloadBtn" href="#" download target="_blank" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center gap-2 transition-colors">
+                    <i class="fa-solid fa-download"></i> <span class="hidden sm:inline">Download MP3</span>
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Hidden HTML Audio Element -->
+    <audio id="mainAudio"></audio>
+
+    <!-- AUTH MODAL -->
+    <div id="loginModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="glassmorphism border border-emerald-500/30 p-8 rounded-3xl max-w-sm w-full space-y-6 shadow-2xl relative">
+            <button onclick="toggleAdminAuth()" class="absolute top-4 right-4 text-slate-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div class="text-center space-y-2">
+                <div class="w-12 h-12 bg-emerald-600/20 text-emerald-400 border border-emerald-500/30 rounded-2xl mx-auto flex items-center justify-center text-xl">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+                <h3 class="text-xl font-extrabold text-white">Admin Access</h3>
+                <p class="text-xs text-slate-400">Enter password to manage resources</p>
+            </div>
+            <form onsubmit="handleAdminLogin(event)" class="space-y-4">
+                <input type="password" id="adminPassword" placeholder="Enter password..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-200 focus:border-emerald-500 text-center focus:outline-none">
+                <p id="loginError" class="text-red-400 text-xs text-center hidden">Incorrect Password!</p>
+                <button type="submit" class="w-full py-3 rounded-xl bg-emerald-600 text-white font-bold text-sm tracking-wide">
+                    Authenticate
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- EXPORT JSON MODAL -->
+    <div id="exportModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="glassmorphism border border-emerald-500/30 p-6 rounded-3xl max-w-lg w-full space-y-4 shadow-2xl relative">
+            <button onclick="closeExportModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <h3 class="text-xl font-extrabold text-white flex items-center gap-2">
+                <i class="fa-solid fa-file-code text-emerald-400"></i> Export GitHub Data (`data.json`)
+            </h3>
+            <p class="text-xs text-slate-400">Copy or download `data.json` and replace it in your GitHub repository.</p>
+            <textarea id="jsonExportText" rows="10" readonly class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs font-mono text-emerald-400 focus:outline-none"></textarea>
+            <div class="flex gap-3">
+                <button onclick="copyExportJson()" class="flex-1 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs">Copy Text</button>
+                <button onclick="downloadExportJson()" class="flex-1 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs">Download data.json</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- APP LOGIC -->
+    <script>
+        const ADMIN_PASSWORD = "Adity@001";
+
+        // Initial Default Data
+        const defaultData = {
+            music: [
+                { id: 'm1', title: 'Cyberbeat Chill', subtext: 'God Adrien Beats', url: 'https://files.catbox.moe/7b8f9a.mp3', desc: 'Chill lo-fi track hosted on Catbox.' },
+                { id: 'm2', title: 'Astro Synth 2026', subtext: 'Retro Wave', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', desc: 'High tempo upbeat soundtrack.' }
+            ],
+            notes: [
+                { id: 'n1', folder: 'Class 12 Paper', title: 'Mathematics Board Paper 2026', subtext: 'PDF • 3.5 MB', url: 'https://files.catbox.moe/sample.pdf', desc: 'Complete solved paper with formulas.' },
+                { id: 'n2', folder: 'Class 12 Paper', title: 'Physics Sample Questions', subtext: 'PDF • 2.1 MB', url: 'https://files.catbox.moe/sample.pdf', desc: 'Important numerical questions.' },
+                { id: 'n3', folder: 'Computer Science', title: 'Python Quick Revision Sheet', subtext: 'PDF • 1.8 MB', url: 'https://files.catbox.moe/sample.pdf', desc: 'Syntax and code snippets cheat sheet.' }
+            ],
+            apk: [
+                { id: 'a1', title: 'God Adrien Music Player', subtext: 'v1.0 • 15 MB', url: 'https://files.catbox.moe/sample.apk', desc: 'Custom Android audio player app.' }
+            ],
+            social: [
+                { id: 's1', title: 'GitHub', subtext: '@GodAdrien', url: 'https://github.com', icon: 'fa-github' },
+                { id: 's2', title: 'Telegram', subtext: 'Join Channel', url: 'https://telegram.org', icon: 'fa-telegram' },
+                { id: 's3', title: 'Instagram', subtext: '@god_adrien', url: 'https://instagram.com', icon: 'fa-instagram' }
+            ]
+        };
+
+        // App State
+        let appData = JSON.parse(localStorage.getItem('god_adrien_data')) || defaultData;
+        let currentSongIndex = -1;
+        let isAdminLoggedIn = false;
+        const mainAudio = document.getElementById('mainAudio');
+
+        // On Page Load
+        window.addEventListener('DOMContentLoaded', () => {
+            renderAllViews();
+            setupAudioPlayer();
+            if (window.location.hash === '#admin') toggleAdminAuth();
+        });
+
+        function saveData() {
+            localStorage.setItem('god_adrien_data', JSON.stringify(appData));
+            renderAllViews();
+            if (isAdminLoggedIn) renderAdminTable();
+        }
+
+        // View Navigation
+        function showSection(section) {
+            const views = ['Home', 'Music', 'Notes', 'Apk', 'Social', 'Admin'];
+            views.forEach(v => {
+                const el = document.getElementById(`view${v}`);
+                if (el) el.classList.add('hidden');
+            });
+
+            const targetView = document.getElementById(`view${capitalize(section)}`);
+            if (targetView) targetView.classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function capitalize(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+
+        // Render Functions
+        function renderAllViews(filter = '') {
+            const term = filter.toLowerCase();
+
+            // 1. Render Spotify Music Track List
+            const spotifyList = document.getElementById('spotifyTrackList');
+            const filteredMusic = appData.music.filter(m => m.title.toLowerCase().includes(term) || m.subtext.toLowerCase().includes(term));
+
+            spotifyList.innerHTML = filteredMusic.map((song, idx) => `
+                <div class="p-4 hover:bg-white/5 flex items-center justify-between gap-4 cursor-pointer transition-colors group" onclick="playSong(${idx})">
+                    <div class="flex items-center gap-4 flex-1 truncate">
+                        <span class="w-8 text-center text-xs font-bold text-slate-500 group-hover:text-emerald-400">${idx + 1}</span>
+                        <div class="w-10 h-10 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center text-emerald-400 font-bold shrink-0">
+                            <i class="fa-solid fa-music"></i>
+                        </div>
+                        <div class="truncate">
+                            <h4 class="font-bold text-white text-sm group-hover:text-emerald-400 transition-colors truncate">${escapeHtml(song.title)}</h4>
+                            <span class="text-xs text-slate-400 block truncate">${escapeHtml(song.subtext || 'God Adrien Track')}</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button onclick="event.stopPropagation(); playSong(${idx})" class="w-9 h-9 rounded-full bg-emerald-500 text-slate-950 flex items-center justify-center text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity">
+                            <i class="fa-solid fa-play ml-0.5"></i>
+                        </button>
+                        <a href="${song.url}" download target="_blank" onclick="event.stopPropagation();" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-emerald-600 hover:text-white text-xs font-semibold text-slate-300 transition-colors flex items-center gap-1.5">
+                            <i class="fa-solid fa-download"></i> <span class="hidden sm:inline">Download</span>
+                        </a>
+                    </div>
+                </div>
+            `).join('') || '<p class="p-6 text-sm text-slate-500 text-center">No songs uploaded yet.</p>';
+
+            // 2. Render Notes Grouped by Header / Directory Folder
+            const notesContainer = document.getElementById('notesContainer');
+            const filteredNotes = appData.notes.filter(n => n.title.toLowerCase().includes(term) || (n.folder && n.folder.toLowerCase().includes(term)));
+            
+            // Grouping logic
+            const grouped = {};
+            filteredNotes.forEach(note => {
+                const folderName = note.folder || 'General Notes';
+                if (!grouped[folderName]) grouped[folderName] = [];
+                grouped[folderName].push(note);
+            });
+
+            notesContainer.innerHTML = Object.keys(grouped).map(folder => `
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3 border-b border-slate-800 pb-2">
+                        <i class="fa-solid fa-folder-open text-purple-400 text-xl"></i>
+                        <h3 class="text-xl font-bold text-white">${escapeHtml(folder)}</h3>
+                        <span class="text-xs px-2.5 py-0.5 rounded-full bg-purple-500/10 text-purple-400 font-semibold border border-purple-500/20">${grouped[folder].length} files</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        ${grouped[folder].map(item => `
+                            <div class="spotify-card p-5 rounded-2xl border border-slate-800 flex flex-col justify-between space-y-4">
+                                <div>
+                                    <h4 class="font-bold text-white text-base">${escapeHtml(item.title)}</h4>
+                                    <span class="text-[10px] text-purple-400 font-bold uppercase">${escapeHtml(item.subtext || 'Document')}</span>
+                                    <p class="text-xs text-slate-400 mt-2 line-clamp-2">${escapeHtml(item.desc || '')}</p>
+                                </div>
+                                <div class="flex gap-2">
+                                    <a href="${item.url}" target="_blank" class="flex-1 text-center py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-xs font-semibold text-white transition-colors">
+                                        <i class="fa-solid fa-eye mr-1"></i> Open PDF
+                                    </a>
+                                    <a href="${item.url}" download target="_blank" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200">
+                                        <i class="fa-solid fa-download"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('') || '<p class="text-sm text-slate-500">No notes found.</p>';
+
+            // 3. Render APK Cards
+            const apkGrid = document.getElementById('apkGrid');
+            apkGrid.innerHTML = appData.apk.map(apk => `
+                <div class="spotify-card p-5 rounded-2xl border border-slate-800 flex flex-col justify-between space-y-4">
+                    <div>
+                        <h4 class="font-bold text-white text-base">${escapeHtml(apk.title)}</h4>
+                        <span class="text-[10px] text-emerald-400 font-bold uppercase">${escapeHtml(apk.subtext || 'APK Build')}</span>
+                        <p class="text-xs text-slate-400 mt-2">${escapeHtml(apk.desc || '')}</p>
+                    </div>
+                    <a href="${apk.url}" download target="_blank" class="w-full text-center py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-xs font-bold text-white transition-colors flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-android"></i> Direct Download APK
+                    </a>
+                </div>
+            `).join('');
+
+            // 4. Render Social Cards
+            const socialGrid = document.getElementById('socialGrid');
+            socialGrid.innerHTML = appData.social.map(s => `
+                <a href="${s.url}" target="_blank" class="spotify-card p-4 rounded-2xl border border-slate-800 flex flex-col items-center text-center space-y-2 group">
+                    <div class="w-12 h-12 rounded-2xl bg-slate-800 group-hover:bg-pink-600 text-pink-400 group-hover:text-white flex items-center justify-center text-xl transition-colors">
+                        <i class="fa-solid ${s.icon || 'fa-link'}"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-white text-sm">${escapeHtml(s.title)}</h4>
+                        <span class="text-[10px] text-slate-400 block">${escapeHtml(s.subtext || '')}</span>
+                    </div>
+                </a>
+            `).join('');
+        }
+
+        // Spotify Audio Player Controls
+        function setupAudioPlayer() {
+            const seekBar = document.getElementById('trackSeekBar');
+            
+            mainAudio.addEventListener('timeupdate', () => {
+                if (mainAudio.duration) {
+                    seekBar.value = (mainAudio.currentTime / mainAudio.duration) * 100;
+                    document.getElementById('currentTime').innerText = formatTime(mainAudio.currentTime);
+                    document.getElementById('totalTime').innerText = formatTime(mainAudio.duration);
+                }
+            });
+
+            seekBar.addEventListener('input', () => {
+                if (mainAudio.duration) {
+                    mainAudio.currentTime = (seekBar.value / 100) * mainAudio.duration;
+                }
+            });
+
+            mainAudio.addEventListener('ended', () => {
+                nextSong();
+            });
+        }
+
+        function playSong(index) {
+            if (index < 0 || index >= appData.music.length) return;
+            currentSongIndex = index;
+            const song = appData.music[index];
+
+            mainAudio.src = song.url;
+            mainAudio.play();
+
+            document.getElementById('playerTitle').innerText = song.title;
+            document.getElementById('playerArtist').innerText = song.subtext || 'God Adrien Track';
+            document.getElementById('playerDownloadBtn').href = song.url;
+            document.getElementById('playPauseBtn').innerHTML = `<i class="fa-solid fa-pause"></i>`;
+        }
+
+        function togglePlayPause() {
+            if (currentSongIndex === -1 && appData.music.length > 0) {
+                playSong(0);
+                return;
+            }
+            if (mainAudio.paused) {
+                mainAudio.play();
+                document.getElementById('playPauseBtn').innerHTML = `<i class="fa-solid fa-pause"></i>`;
+            } else {
+                mainAudio.pause();
+                document.getElementById('playPauseBtn').innerHTML = `<i class="fa-solid fa-play ml-0.5"></i>`;
+            }
+        }
+
+        function nextSong() {
+            if (appData.music.length === 0) return;
+            const nextIdx = (currentSongIndex + 1) % appData.music.length;
+            playSong(nextIdx);
+        }
+
+        function prevSong() {
+            if (appData.music.length === 0) return;
+            const prevIdx = (currentSongIndex - 1 + appData.music.length) % appData.music.length;
+            playSong(prevIdx);
+        }
+
+        function formatTime(secs) {
+            const m = Math.floor(secs / 60);
+            const s = Math.floor(secs % 60);
+            return `${m}:${s < 10 ? '0' : ''}${s}`;
+        }
+
+        // Search Input Handling
+        function handleSearch() {
+            const query = document.getElementById('searchInput').value;
+            renderAllViews(query);
+        }
+
+        // Admin Auth
+        function toggleAdminAuth() {
+            if (isAdminLoggedIn) {
+                showSection('home');
+                isAdminLoggedIn = false;
+                document.getElementById('adminBtnText').innerText = "Admin";
+            } else {
+                document.getElementById('loginModal').classList.toggle('hidden');
+            }
+        }
+
+        function handleAdminLogin(e) {
+            e.preventDefault();
+            const pass = document.getElementById('adminPassword').value;
+            if (pass === ADMIN_PASSWORD) {
+                isAdminLoggedIn = true;
+                document.getElementById('loginError').classList.add('hidden');
+                document.getElementById('loginModal').classList.add('hidden');
+                document.getElementById('adminBtnText').innerText = "Exit Admin";
+                showSection('admin');
+                renderAdminTable();
+            } else {
+                document.getElementById('loginError').classList.remove('hidden');
+            }
+        }
+
+        function toggleFolderInput() {
+            const cat = document.getElementById('itemCategory').value;
+            const folderGrp = document.getElementById('folderInputGroup');
+            if (cat === 'notes') {
+                folderGrp.classList.remove('hidden');
+            } else {
+                folderGrp.classList.add('hidden');
+            }
+        }
+
+        // Form Submit
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            const editId = document.getElementById('editItemId').value;
+            const category = document.getElementById('itemCategory').value;
+            const folder = document.getElementById('itemFolder').value;
+            const title = document.getElementById('itemTitle').value;
+            const subtext = document.getElementById('itemSubtext').value;
+            const url = document.getElementById('itemUrl').value;
+            const desc = document.getElementById('itemDesc').value;
+
+            if (editId) {
+                ['music', 'notes', 'apk', 'social'].forEach(cat => {
+                    appData[cat] = appData[cat].filter(i => i.id !== editId);
+                });
+                appData[category].push({ id: editId, folder, title, subtext, url, desc });
+            } else {
+                const newItem = { id: 'id_' + Date.now(), folder, title, subtext, url, desc };
+                appData[category].push(newItem);
+            }
+
+            saveData();
+            resetForm();
+        }
+
+        function renderAdminTable() {
+            const tbody = document.getElementById('adminTableBody');
+            let html = '';
+
+            ['music', 'notes', 'apk', 'social'].forEach(cat => {
+                appData[cat].forEach(item => {
+                    html += `
+                        <tr class="hover:bg-slate-800/40">
+                            <td class="py-3 px-4 font-bold text-emerald-400 uppercase text-xs">${cat}</td>
+                            <td class="py-3 px-4 font-semibold text-white">${escapeHtml(item.folder ? '[' + item.folder + '] ' + item.title : item.title)}</td>
+                            <td class="py-3 px-4 text-xs text-slate-400">${escapeHtml(item.subtext || '-')}</td>
+                            <td class="py-3 px-4 text-xs text-blue-400 truncate max-w-xs">${escapeHtml(item.url)}</td>
+                            <td class="py-3 px-4 text-center">
+                                <button onclick="deleteItem('${cat}', '${item.id}')" class="px-2.5 py-1 rounded bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white text-xs transition-colors">
+                                    <i class="fa-solid fa-trash"></i> Delete
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            });
+
+            tbody.innerHTML = html || '<tr><td colspan="5" class="py-4 text-center text-slate-500">No items found.</td></tr>';
+        }
+
+        function deleteItem(cat, id) {
+            appData[cat] = appData[cat].filter(i => i.id !== id);
+            saveData();
+        }
+
+        function resetForm() {
+            document.getElementById('itemForm').reset();
+            document.getElementById('editItemId').value = '';
+            toggleFolderInput();
+        }
+
+        // Export JSON Functions
+        function exportJSON() {
+            document.getElementById('jsonExportText').value = JSON.stringify(appData, null, 2);
+            document.getElementById('exportModal').classList.remove('hidden');
+        }
+
+        function closeExportModal() {
+            document.getElementById('exportModal').classList.add('hidden');
+        }
+
+        function copyExportJson() {
+            const txt = document.getElementById('jsonExportText');
+            txt.select();
+            document.execCommand('copy');
+            alert('JSON copied!');
+        }
+
+        function downloadExportJson() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appData, null, 2));
+            const a = document.createElement('a');
+            a.setAttribute("href", dataStr);
+            a.setAttribute("download", "data.json");
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>"']/g, function(m) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
+            });
+        }
+    </script>
+</body>
+</html>
