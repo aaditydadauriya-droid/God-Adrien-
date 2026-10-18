@@ -411,7 +411,7 @@
     </main>
 
     <!-- PERSISTENT SPOTIFY AUDIO PLAYER BAR -->
-    <div id="spotifyPlayerBar" class="fixed bottom-0 left-0 right-0 z-50 glassmorphism border-t border-slate-800 p-3 px-4 sm:px-8">
+    <div id="spotifyPlayerBar" class="fixed bottom-0 left-0 right-0 z-50 glassmorphism border-t border-slate-800 p-3 px-4 sm:px-8 hidden">
         <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
             
             <!-- Song Meta -->
@@ -689,7 +689,8 @@
 
             mainAudio.src = song.url;
             mainAudio.play();
-
+          
+           document.getElementById('spotifyPlayerBar').classList.remove('hidden');
             document.getElementById('playerTitle').innerText = song.title;
             document.getElementById('playerArtist').innerText = song.subtext || 'God Adrien Track';
             document.getElementById('playerDownloadBtn').href = song.url;
